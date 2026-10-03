@@ -1,14 +1,108 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Grande Novidade</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Validação de Acesso - DevSecOps</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 650px;
+      margin: 40px auto;
+      padding: 20px;
+      background: #f4f6f8;
+    }
+    form, #resultado {
+      background: white;
+      padding: 24px;
+      border-radius: 10px;
+    }
+    fieldset {
+      margin-bottom: 18px;
+      border: 1px solid #ccc;
+    }
+    button {
+      padding: 12px 20px;
+      cursor: pointer;
+    }
+    #resultado {
+      display: none;
+      margin-top: 20px;
+    }
+    .erro {
+      color: #b00020;
+    }
+  </style>
 </head>
 <body>
-<main>
-<h1>Está pronto?</h1>
-<p>Aplicação DevSecOps em construção.</p>
-</main>
+  <main>
+    <h1>Validação de Acesso</h1>
+
+    <form id="formulario">
+      <fieldset>
+        <legend>1. Está preparado(a) para uma grande novidade?</legend>
+        <label><input type="radio" name="novidade" value="sim" required> Sim</label>
+        <label><input type="radio" name="novidade" value="nao"> Não</label>
+      </fieldset>
+
+      <fieldset>
+        <legend>2. Você tem 18 anos ou mais?</legend>
+        <label><input type="radio" name="idade" value="sim" required> Sim</label>
+        <label><input type="radio" name="idade" value="nao"> Não</label>
+      </fieldset>
+
+      <fieldset>
+        <legend>3. Você leu o aviso de privacidade e autoriza o tratamento dos seus dados para esta finalidade (LGPD)?</legend>
+        <label><input type="radio" name="lgpd" value="sim" required> Sim</label>
+        <label><input type="radio" name="lgpd" value="nao"> Não</label>
+      </fieldset>
+
+      <button type="submit">Verificar respostas</button>
+    </form>
+
+    <section id="resultado" aria-live="polite"></section>
+  </main>
+
+  <script>
+    "use strict";
+
+    const formulario = document.querySelector("#formulario");
+    const resultado = document.querySelector("#resultado");
+
+    formulario.addEventListener("submit", function (evento) {
+      evento.preventDefault();
+
+      const dados = new FormData(formulario);
+
+      const aprovado =
+        dados.get("novidade") === "sim" &&
+        dados.get("idade") === "sim" &&
+        dados.get("lgpd") === "sim";
+
+      resultado.replaceChildren();
+      resultado.style.display = "block";
+
+      if (aprovado) {
+        const titulo = document.createElement("h2");
+        titulo.textContent = "Acesso liberado";
+
+        const link = document.createElement("a");
+        link.href =
+          "https://www.instagram.com/reel/Ddzp9B-xrd26nFICE2aASCfJyfRLobCLJh0IMM0/?stkn=MTMyYWt0NnR2Y2Eycg==";
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+        link.textContent = "Abrir apresentação";
+
+        resultado.append(titulo, link);
+      } else {
+        const mensagem = document.createElement("p");
+        mensagem.className = "erro";
+        mensagem.textContent =
+          "A apresentação somente é liberada quando as três respostas forem Sim.";
+
+        resultado.appendChild(mensagem);
+      }
+    });
+  </script>
 </body>
 </html>
